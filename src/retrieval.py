@@ -154,7 +154,11 @@ def embed_query(query_text):
     return base
 
 
-def retrieve_chunks(query_text, top_k=3, similarity_threshold=0.85):
+def retrieve_chunks(query_text, top_k=3, similarity_threshold=0.75):
+    """
+    Search for relevant runbooks. 
+    Threshold lowered to 0.75 to capture specific error matches.
+    """
     query_embedding = embed_query(query_text)
 
     scored = []
@@ -169,9 +173,13 @@ def retrieve_chunks(query_text, top_k=3, similarity_threshold=0.85):
 
 def format_results(chunks_with_scores):
     if not chunks_with_scores:
-        return "No matching runbook found. Escalate to L2 support."
+        return "No matching runbook found. Score: 0.0"
 
     parts = []
+    # Include max score for the agent to use as a confidence signal
+    max_score = chunks_with_scores[0][1]
+    parts.append(f"MAX_RETRIEVAL_SCORE: {max_score:.2f}")
+    
     for chunk, score in chunks_with_scores:
         parts.append(chunk.content)
     return "\n---\n".join(parts)

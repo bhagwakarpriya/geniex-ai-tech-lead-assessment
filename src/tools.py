@@ -53,5 +53,5 @@ def search_runbooks(params):
 
 
 def get_audit_log():
-    """Return the audit log for the current batch session."""
+    """Return the audit log for the current session."""
     return list(_audit_log)

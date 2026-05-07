@@ -6,6 +6,7 @@ DEFAULT_VALUES = {
     "category": "other",
     "priority": "medium",
     "assigned_team": "L1",
+    "confidence": "LOW",
     "summary": "Unable to parse model response",
 }
 
@@ -18,8 +19,8 @@ def parse_triage_response(raw_text):
     """
     result = {}
 
-    for field in ["CATEGORY", "PRIORITY", "ASSIGNED_TEAM", "SUMMARY"]:
-        match = re.search(rf"{field}:\s*(.+)", raw_text)
+    for field in ["CATEGORY", "PRIORITY", "ASSIGNED_TEAM", "CONFIDENCE", "SUMMARY"]:
+        match = re.search(rf"{field}:\s*(.+)", raw_text, re.IGNORECASE)
         if match:
             result[field.lower()] = match.group(1).strip()
         else:

@@ -10,13 +10,12 @@ import json
 import logging
 from agent import triage_ticket
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def main():
-
-    conversation_history = []
-
+    
     tickets = [
         (
             "TKT-001",
@@ -40,9 +39,15 @@ def main():
     for ticket_id, ticket_text in tickets:
         try:
             print(f"\nProcessing {ticket_id}...")
+            
+            # FIX: Fresh history per ticket
+            conversation_history = []
+            
             result = triage_ticket(ticket_text, ticket_id, conversation_history)
+            
             print(json.dumps(result, indent=2))
             results["succeeded"] += 1
+            
         except Exception as e:
             logger.error(f"Failed to process {ticket_id}: {e}")
             results["failed"] += 1
